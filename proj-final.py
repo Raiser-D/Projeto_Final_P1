@@ -97,8 +97,56 @@ class Produto:
         return f'''
         Descrição: {self.descricao} 
         Preço: R${self.valor:.2f}'''
-
     
+
+class Entrega:
+    def __init__(self, id, carrinho, entregador, dt_entrega, status):
+        self.__id = id
+        self._carrinho = carrinho
+        self.entregador = entregador
+        self.dt_entrega = dt_entrega
+        self.status = status
+
+    @property
+    def id(self):
+        return self.__id
+    @id.setter
+    def id(self, novo_id):
+        self.__id = novo_id
+
+    def calcular_prazo_entrega(self):
+        # Tratar erro para caso insira um estado diferente de SC, não faz entrega
+        '''A pessoa insere a cidade, comparamos com o banco, 
+        aí o cara coloca Indaial. Vemos a distância entre eles e 
+        calculamos o tempo usando uma velocidade média de sla 40 km/h'''
+        # Pegar distância do Banco de Dados?
+        pass
+
+    def pegar_dados_carrinho(self):
+        return self._carrinho.produtos
+        # COMPOSIÇÃO
+        '''
+        self._carrinho = Carrinho_compras(cliente, valor_final)
+        PRECISA ADICIONAR OS ATRIBUTOS COMO PARAMENTROS
+        '''
+
+    def atualizar_status(self):
+        self.status = novo_status
+
+    def imprimir_dados(self):
+        print(f"ID: {self.__id}")
+        print(f"Entregador: {self.entregador}")
+        print(f"Data de Entrega: {self.dt_entrega}")
+        print(f"Status: {self.status}")
+        print("Produtos no Carrinho:")
+        for produto in self._carrinho.produtos:
+            print(f"- {produto.nome} (ID: {produto.id}, Preço: {produto.preco})")
+
+    def get_id(self):
+        return self.__id   # ???
+    
+
+
 class Carrinho_compras:
     def __init__(self, cliente, valor_final):
         self._cliente = cliente
@@ -133,52 +181,12 @@ class Carrinho_compras:
         self.produtos.clear()  # Limpa o carrinho após finalizar a compra
 
     
-class Entrega:
-    def __init__(self, id, carrinho, entregador, dt_entrega, status):
-        self.__id = id
-        self._carrinho = carrinho
-        self.entregador = entregador
-        self.dt_entrega = dt_entrega
-        self.status = status
-
-    @property
-    def id(self):
-        return self.__id
-    @id.setter
-    def id(self, novo_id):
-        self.__id = novo_id
-
-    def calcular_prazo_entrega(self):
-        # Tratar erro para caso insira um estado diferente de SC, não faz entrega
-        '''A pessoa insere a cidade, comparamos com o banco, 
-        aí o cara coloca Indaial. Vemos a distância entre eles e 
-        calculamos o tempo usando uma velocidade média de sla 40 km/h'''
-        # Pegar distância do Banco de Dados?
-        pass
-
-    def pegar_dados_carrinho(self):
-        return self._carrinho.produtos
-
-    def atualizar_status(self):
-        self.status = novo_status
-
-    def imprimir_dados(self):
-        print(f"ID: {self.__id}")
-        print(f"Entregador: {self.entregador}")
-        print(f"Data de Entrega: {self.dt_entrega}")
-        print(f"Status: {self.status}")
-        print("Produtos no Carrinho:")
-        for produto in self._carrinho.produtos:
-            print(f"- {produto.nome} (ID: {produto.id}, Preço: {produto.preco})")
-
-    def get_id(self):
-        return self.__id   # ???
 
 class Entregador(Pessoa):
     def __init__(self, nome, dt_nasc, telefone, email, senha, cpf):
         super().__init__(nome, dt_nasc, telefone, email, senha, cpf)
 
-    def atribuir_entrega(entrega): # FAZER COMPOSIÇÃO
+    def atribuir_entrega(entrega): # FAZER COMPOSIÇÃO - Talvez ñ seja aqui
         pass
 
 c1 = Cliente("João", "10-04-2003", "912563470", "jojo.p@gmail.com", "11254", "12345678901", "001", "Blumenau, SC")
@@ -200,3 +208,4 @@ print(f"\nValor total da compra: {carrinho.calcularTotal()}")
 # ID do produto para remover
 produto_id = 1
 novo_status = "Entregue"
+
