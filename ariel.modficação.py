@@ -1,8 +1,26 @@
-'''Diagrama de classes de um sistema para o gerenciamento de uma loja virtual (E-Commerce), 
-em que a pessoa poderá se cadastrar no site da loja, virando um cliente. 
-Também terá a possibilidade de comprar quantos produtos quiser, que serão adicionados ao carrinho de compras, 
-o qual cada cliente terá um único seu. Após a compra ser efetuada, 
-o entregador utilizará as informações do cadastro do cliente e do carrinho de compras para sair para entrega.'''
+from db_conexao import conectar_banco
+
+def main():
+    """Função principal do sistema."""
+    conexao = conectar_banco()
+    if conexao:
+        try:
+            cursor = conexao.cursor()
+
+            # Exemplo de comando SQL
+            cursor.execute("SELECT * FROM tabela_exemplo;")  # Substitua pelo nome da sua tabela
+            resultados = cursor.fetchall()
+            print("Resultados da consulta:")
+            for linha in resultados:
+                print(linha)
+
+        except mysql.connector.Error as err:
+            print(f"Erro ao executar comando no banco: {err}")
+        finally:
+            # Fechar cursor e conexão
+            cursor.close()
+            conexao.close()
+
 class Pessoa:
     def __init__(self, nome, dt_nasc, telefone, email, senha, cpf):
         self.nome = nome
@@ -51,6 +69,25 @@ class Cliente(Pessoa):
     def id(self, novo_id):
         self.__id = novo_id
 
+    def fazer_cadastro(self):
+        try:
+            # Solicita os dados do cliente
+            self.nome = input("Digite seu nome: ")
+            self.dt_nasc = input("Digite sua data de nascimento (DD/MM/AAAA): ")
+            self.telefone = input("Digite seu telefone: ")
+            self.email = input("Digite seu e-mail: ")
+            self.__senha = input("Digite sua senha: ")
+            self.__cpf = input("Digite seu CPF: ")
+
+            if not self.nome or not self.dt_nasc or not self.email or not self.__cpf or not self.__senha:
+                print("Todos os campos são obrigatórios.")
+
+            if len(self.__cpf) != 11 or not self.__cpf.isdigit():
+                print("O CPF deve conter exatamente 11 dígitos numéricos.")
+
+            print("Cadastro realizado com sucesso!")
+        except ValueError as e:
+            print(f"Erro ao realizar cadastro: {e}")
 
     def fazer_login(self):
         pass
@@ -66,36 +103,6 @@ class Cliente(Pessoa):
             {super().__str__()}
             Endereço: {self.endereco_ent}'''
             # PRECISA COLOCAR ID?
-
-class Cadastro:
-    def __init__(self):
-        self.nome = ""
-        self.dt_nasc = ""
-        self.telefone = ""
-        self.email = ""
-        self.__senha = ""
-        self.__cpf = ""
-
-def fazer_cadastro(self):
-        try:
-            # Solicita os dados do cliente
-            self.nome = input("Digite seu nome: ")
-            self.dt_nasc = input("Digite sua data de nascimento (DD/MM/AAAA): ")
-            self.telefone = input("Digite seu telefone: ")
-            self.email = input("Digite seu e-mail: ")
-            self.__senha = input("Digite sua senha: ")
-            self.__cpf = input("Digite seu CPF: ")
-
-            if not self.nome or not self.dt_nasc or not self.email or not self.__cpf or not self.__senha:
-                raise ValueError("Todos os campos são obrigatórios.")
-
-            if len(self.__cpf) != 11 or not self.__cpf.isdigit():           #raise ValueError, serve para salvar a informação do erro que será posteriormente exibid
-                raise ValueError("O CPF deve ter exatos 11 dígitos numéricos.")
-
-        except ValueError as e:
-            print(f"Erro ao realizar cadastro: {e}")
-
-
 
 class Produto:
     def __init__(self, id, categoria, descricao, valor, qtd_estoque):
@@ -226,4 +233,19 @@ class Entregador(Pessoa):
         pass
 
 
+def main():
+    print("Bem-vindo ao sistema de cadastro da loja virtual!")
+    
+    # Solicita informações básicas para instanciar o cliente
+    cliente = Cliente(None, None, None, None, None, None, "001", "Endereço Padrão")
+    
+    # Chama o método para realizar o cadastro
+    cliente.fazer_cadastro()
+    
+    # Exibe os dados cadastrados
+    print("\nCadastro finalizado! Dados do cliente:")
+    print(cliente)
 
+# Inicia o programa
+if __name__ == "__main__":
+    main()
