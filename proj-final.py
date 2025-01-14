@@ -61,6 +61,41 @@ E-mail: {self.email}
 '''
 # PRECISA COLOCAR CPF E SENHA?
 
+
+class Cadastro:
+    def __init__(self):
+        self.nome = ""
+        self.dt_nasc = ""
+        self.telefone = ""
+        self.email = ""
+        self.__senha = ""
+        self.__cpf = ""
+
+    def fazer_cadastro(self):
+        try:
+            # Solicita os dados do cliente
+            self.nome = input("Digite seu nome: ")
+            self.dt_nasc = input("Digite sua data de nascimento (DD-MM-AAAA): ")
+            self.telefone = input("Digite seu telefone: ")
+            self.email = input("Digite seu email: ")
+            self.__senha = input("Digite sua senha: ")
+            self.__cpf = input("Digite seu CPF: ")
+
+            if not self.nome or not self.dt_nasc or not self.email or not self.__cpf or not self.__senha:
+                print("Todos os campos são obrigatórios.")
+                raise ValueError("Todos os campos são obrigatórios.")
+
+            if len(self.__cpf) != 11 or not self.__cpf.isdigit():
+                print("O CPF deve conter exatamente 11 dígitos numéricos.")
+            if len(self.__cpf) != 11 or not self.__cpf.isdigit():           #raise ValueError, serve para salvar a informação do erro que será posteriormente exibid
+                raise ValueError("O CPF deve ter exatos 11 dígitos numéricos.")
+
+            print("Cadastro realizado com sucesso!")
+            self.cliente = Cliente(self.nome, self.dt_nasc, self.telefone, self.email, self.__senha, self.__cpf, "001", "Endereço Padrão")
+        except ValueError as e:
+            print(f"Erro ao realizar cadastro: {e}")
+
+
 class Cliente(Pessoa):
     def __init__(self, nome, dt_nasc, telefone, email, senha, cpf, id, endereco):
         super().__init__(nome, dt_nasc, telefone, email, senha, cpf)
@@ -74,25 +109,6 @@ class Cliente(Pessoa):
     def id(self, novo_id):
         self.__id = novo_id
 
-    def fazer_cadastro(self):
-        try:
-            # Solicita os dados do cliente
-            self.nome = input("Digite seu nome: ")
-            self.dt_nasc = input("Digite sua data de nascimento (DD/MM/AAAA): ")
-            self.telefone = input("Digite seu telefone: ")
-            self.email = input("Digite seu e-mail: ")
-            self.__senha = input("Digite sua senha: ")
-            self.__cpf = input("Digite seu CPF: ")
-
-            if not self.nome or not self.dt_nasc or not self.email or not self.__cpf or not self.__senha:
-                print("Todos os campos são obrigatórios.")
-
-            if len(self.__cpf) != 11 or not self.__cpf.isdigit():
-                print("O CPF deve conter exatamente 11 dígitos numéricos.")
-
-            print("Cadastro realizado com sucesso!")
-        except ValueError as e:
-            print(f"Erro ao realizar cadastro: {e}")
 
     def fazer_login(self):
         pass
@@ -106,7 +122,7 @@ class Cliente(Pessoa):
     def __str__(self):
         return f'''
             {super().__str__()}
-            Endereço: {self.endereco_ent}'''
+            Endereço: {self._endereco}'''
             # PRECISA COLOCAR ID?
 
 class Produto:
@@ -131,7 +147,7 @@ class Produto:
             nova_qtd = result[0] - qtd
             self.cursor.execute(f'UPDATE produtos SET qtd_estoque = {nova_qtd} WHERE id = {self.__id}')
             # Salva o valor do qtd_estoque com a nova_qtd e pega o próprio ID do produto
-            self.conn.commit()
+            self.conexao.commit()
             self.qtd_estoque = nova_qtd # Atualiza o valor do atributo
             print(f"Estoque atualizado. Nova quantidade: {nova_qtd}")
         else:
@@ -247,24 +263,26 @@ class Entregador(Pessoa):
         self.conexao.commit()
         print(f"Entrega {entrega.descricao} atribuída ao entregador {self.nome}.")
 
+cadastro = Cadastro()
+cadastro.fazer_cadastro()
+
 
 def main():
     print("Bem-vindo ao sistema de cadastro da loja virtual!")
     
     # Solicita informações básicas para instanciar o cliente
-    cliente = Cliente(None, None, None, None, None, None, "001", "Endereço Padrão")
+    # cliente = Cliente(None, None, None, None, None, None, "001", "Endereço Padrão")
     
     # Chama o método para realizar o cadastro
-    cliente.fazer_cadastro()
     
     # Exibe os dados cadastrados
     print("\nCadastro finalizado! Dados do cliente:")
-    print(cliente)
+    print(cadastro.cliente)
 
 # Inicia o programa
 if __name__ == "__main__":
     main()
-
+'''
 c1 = Cliente("João", "10-04-2003", "912563470", "jojo.p@gmail.com", "11254", "12345678901", "001", "Blumenau, SC")
 carrinho = Carrinho_compras()
 
@@ -283,5 +301,7 @@ print(f"\nValor total da compra: {carrinho.calcularTotal()}")
 
 # ID do produto para remover
 produto_id = 1
+'''
 novo_status = "Entregue"
+
 
