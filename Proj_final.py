@@ -243,7 +243,7 @@ def main():
     conexao = conectar_banco()
     if conexao:
         '''
-        Como o nosso programa possui o intuito de ser apenas um e-comerce client-side, nao ha a possibilidade de adicionar novos produtos, porém incluimos uma função
+        Como o nosso programa possui o intuito de ser apenas um e-comerce client-side, não há a possibilidade de adicionar novos produtos, porém incluimos uma função
         que gera novos produtos para facilitar a utilização do codigo. Pedimos que caso utilize, retire a hashtag e depois adicione novamente caso rode novamente o programa,
         para evitar dados duplicados. 
         '''
