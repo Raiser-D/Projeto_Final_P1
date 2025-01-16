@@ -23,6 +23,7 @@ CREATE TABLE produtos (
     categoria VARCHAR(50) NOT NULL,
     descricao VARCHAR(255) NOT NULL,
     valor DECIMAL(10, 2) NOT NULL,
+    qtd_estoque INT NOT NULL
 );
 
 CREATE TABLE carrinhos (
